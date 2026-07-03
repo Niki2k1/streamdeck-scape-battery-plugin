@@ -46,7 +46,7 @@ export class MonitorBattery extends SingletonAction<MonitorSettings> {
 	// eslint-disable-next-line jsdoc/require-jsdoc
 	override onSendToPlugin(ev: SendToPluginEvent<JsonValue, MonitorSettings>): Promise<void> | void {
 		if (ev.payload instanceof Object && "event" in ev.payload && (ev.payload.event === "getDevices" || ev.payload.event === "refreshDevices")) {
-			streamDeck.ui.current?.sendToPropertyInspector({
+			streamDeck.ui.sendToPropertyInspector({
 				event: "getDevices",
 				items: ScapeDongle.listDevices().map((device) => ({ label: device.displayName, value: device.id })),
 			});

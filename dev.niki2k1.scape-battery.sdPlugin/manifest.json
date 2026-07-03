@@ -28,9 +28,9 @@
     "CodePath": "bin/plugin.js",
     "Description": "A battery monitoring tool for the Fractal Design Scape wireless headset.",
     "Icon": "imgs/plugin/marketplace-icon",
-    "SDKVersion": 2,
+    "SDKVersion": 3,
     "Software": {
-        "MinimumVersion": "6.5"
+        "MinimumVersion": "7.1"
     },
     "OS": [
         {
@@ -43,7 +43,7 @@
         }
     ],
     "Nodejs": {
-        "Version": "20",
+        "Version": "24",
         "Debug": "enabled"
     },
     "UUID": "dev.niki2k1.scape-battery"
