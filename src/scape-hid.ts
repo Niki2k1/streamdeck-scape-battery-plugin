@@ -325,19 +325,20 @@ export class ScapeSource extends EventEmitter<ScapeEvents> {
 	 */
 	private tryProxy(): void {
 		if (!this.running) return;
-		let settled = false;
+		let failed = false;
 		const ws = new WebSocket(PROXY_URL);
 
+		// Handles both a failed connection attempt and a drop of an established
+		// connection (onerror and onclose can both fire; act only once per socket).
 		const fail = (): void => {
-			if (settled || !this.running) return;
-			settled = true;
+			if (failed || !this.running) return;
+			failed = true;
 			this.ws = null;
 			this.startHid();
 			this.retryTimer = setTimeout(() => this.tryProxy(), PROXY_RETRY_MS);
 		};
 
 		ws.onopen = (): void => {
-			settled = true;
 			this.ws = ws;
 			this.stopHid();
 		};
