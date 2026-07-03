@@ -48,6 +48,7 @@ A personal checklist of (manual) integration tests to make sure everything funct
 
 ## Credits
 
+- Based on [fresh4/streamdeck-ghub-battery-plugin](https://github.com/fresh4/streamdeck-ghub-battery-plugin) by Fresh — the action structure, key rendering, and battery key images originate there, adapted here for the Fractal Scape (used with thanks)
 - HID protocol reference: [charlietran/scapectl](https://github.com/charlietran/scapectl)
 - Headphones action icon: [Lucide](https://lucide.dev) (ISC license)
 - Property inspector components: [sdpi-components](https://sdpi-components.dev) by Elgato
