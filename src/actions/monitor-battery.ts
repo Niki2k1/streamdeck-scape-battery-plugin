@@ -28,7 +28,7 @@ const instances = new Map<string, Instance>();
  *
  * Upon receiving updates, it changes the displayed icon and charged percentage value to match.
  */
-@action({ UUID: "com.fresh.scape-battery.monitor" })
+@action({ UUID: "dev.niki2k1.scape-battery.monitor" })
 export class MonitorBattery extends SingletonAction<MonitorSettings> {
 	// Handle change in user defined settings from UI.
 	// eslint-disable-next-line jsdoc/require-jsdoc

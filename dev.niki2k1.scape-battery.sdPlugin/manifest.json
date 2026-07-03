@@ -1,12 +1,12 @@
 {
     "Name": "Scape Battery",
     "Version": "1.0.0.0",
-    "Author": "Fresh",
+    "Author": "niki2k1",
     "Actions": [
         {
             "Name": "Scape Headset",
             "UserTitleEnabled": false,
-            "UUID": "com.fresh.scape-battery.monitor",
+            "UUID": "dev.niki2k1.scape-battery.monitor",
             "Icon": "imgs/actions/monitor/icon",
             "Tooltip": "Monitors the Fractal Scape headset's battery status.",
             "PropertyInspectorPath": "ui/monitor-battery.html",
@@ -46,5 +46,5 @@
         "Version": "20",
         "Debug": "enabled"
     },
-    "UUID": "com.fresh.scape-battery"
+    "UUID": "dev.niki2k1.scape-battery"
 }

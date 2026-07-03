@@ -10,8 +10,8 @@
     },
     "scripts": {
         "build": "rollup -c && npm run copy-deps",
-        "copy-deps": "rm -rf com.fresh.scape-battery.sdPlugin/node_modules && mkdir -p com.fresh.scape-battery.sdPlugin/node_modules && cp -R node_modules/node-hid node_modules/pkg-prebuilds com.fresh.scape-battery.sdPlugin/node_modules/",
-        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.fresh.scape-battery\"",
+        "copy-deps": "rm -rf dev.niki2k1.scape-battery.sdPlugin/node_modules && mkdir -p dev.niki2k1.scape-battery.sdPlugin/node_modules && cp -R node_modules/node-hid node_modules/pkg-prebuilds dev.niki2k1.scape-battery.sdPlugin/node_modules/",
+        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart dev.niki2k1.scape-battery\"",
         "lint": "eslint --max-warnings 0"
     },
     "prettier": "@elgato/prettier-config",

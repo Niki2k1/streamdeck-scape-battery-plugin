@@ -7,7 +7,7 @@ import path from "node:path";
 import url from "node:url";
 
 const isWatching = !!process.env.ROLLUP_WATCH;
-const sdPlugin = "com.fresh.scape-battery.sdPlugin";
+const sdPlugin = "dev.niki2k1.scape-battery.sdPlugin";
 
 /**
  * @type {import('rollup').RollupOptions}
