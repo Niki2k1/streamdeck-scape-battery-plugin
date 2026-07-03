@@ -14,10 +14,10 @@ import {
 import streamDeck from "@elgato/streamdeck";
 import { Jimp } from "jimp";
 
-import { ScapeDongle } from "../scape-hid";
+import { ScapeDongle, ScapeSource } from "../scape-hid";
 import type { HeadsetStatus, Instance, MonitorSettings } from "../types";
 
-const dongle = new ScapeDongle();
+const source = new ScapeSource();
 let monitoring = false;
 
 const instances = new Map<string, Instance>();
@@ -66,11 +66,11 @@ export class MonitorBattery extends SingletonAction<MonitorSettings> {
 
 		if (!monitoring) {
 			monitoring = true;
-			dongle.on("status", (status) => updateInstances(status));
-			dongle.on("dongle", (present) => {
+			source.on("status", (status) => updateInstances(status));
+			source.on("dongle", (present) => {
 				if (!present) updateInstances({ connected: false, percentage: 0, powerOn: false, muted: false });
 			});
-			dongle.start();
+			source.start();
 		}
 	}
 

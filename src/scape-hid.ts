@@ -222,6 +222,145 @@ export class ScapeDongle extends EventEmitter<ScapeEvents> {
 	}
 }
 
+const PROXY_URL = "ws://127.0.0.1:9124";
+const PROXY_RETRY_MS = 15000;
+
+/**
+ * Status frame pushed by the scaped daemon over its WebSocket.
+ */
+type ProxyStatus = {
+	/**
+	 * Message discriminator; status frames are "status".
+	 */
+	type: string;
+	/**
+	 * Whether the headset is connected to the dongle.
+	 */
+	connected: boolean;
+	/**
+	 * Battery percentage, or null when the headset is offline.
+	 */
+	battery: number | null;
+	/**
+	 * Whether the headset reports itself as powered on.
+	 */
+	powerOn: boolean;
+	/**
+	 * Whether the boom mic is muted.
+	 */
+	muted: boolean;
+	/**
+	 * Whether the daemon has released the HID device (pause mode).
+	 */
+	paused: boolean;
+};
+
+/**
+ * Preferred status source: connects to a local scaped daemon (single HID owner)
+ * when available, and falls back to direct HID polling otherwise. HID opens are
+ * exclusive on macOS, so when the daemon runs, it must be the only reader.
+ */
+export class ScapeSource extends EventEmitter<ScapeEvents> {
+	/**
+	 * Direct HID fallback, active only while the proxy is unreachable.
+	 */
+	private hid: ScapeDongle | null = null;
+	/**
+	 * Timer for periodic proxy reconnect attempts while on the HID fallback.
+	 */
+	private retryTimer: NodeJS.Timeout | null = null;
+	/**
+	 * Whether start() has been called and the source should keep running.
+	 */
+	private running = false;
+	/**
+	 * WebSocket connection to the scaped daemon, if established.
+	 */
+	private ws: WebSocket | null = null;
+
+	/**
+	 * Starts monitoring: tries the scaped proxy first, falls back to direct HID.
+	 */
+	start(): void {
+		if (this.running) return;
+		this.running = true;
+		this.tryProxy();
+	}
+
+	/**
+	 * Stops monitoring and releases the proxy connection and/or HID device.
+	 */
+	stop(): void {
+		this.running = false;
+		if (this.retryTimer) clearTimeout(this.retryTimer);
+		this.retryTimer = null;
+		this.ws?.close();
+		this.ws = null;
+		this.stopHid();
+	}
+
+	/**
+	 * Starts the direct HID fallback if it is not already running.
+	 */
+	private startHid(): void {
+		if (this.hid) return;
+		this.hid = new ScapeDongle();
+		this.hid.on("status", (status) => this.emit("status", status));
+		this.hid.on("dongle", (present) => this.emit("dongle", present));
+		this.hid.start();
+	}
+
+	/**
+	 * Stops and releases the direct HID fallback.
+	 */
+	private stopHid(): void {
+		this.hid?.stop();
+		this.hid?.removeAllListeners();
+		this.hid = null;
+	}
+
+	/**
+	 * Attempts a proxy connection; on failure or drop, runs the HID fallback
+	 * and retries the proxy periodically.
+	 */
+	private tryProxy(): void {
+		if (!this.running) return;
+		let settled = false;
+		const ws = new WebSocket(PROXY_URL);
+
+		const fail = (): void => {
+			if (settled || !this.running) return;
+			settled = true;
+			this.ws = null;
+			this.startHid();
+			this.retryTimer = setTimeout(() => this.tryProxy(), PROXY_RETRY_MS);
+		};
+
+		ws.onopen = (): void => {
+			settled = true;
+			this.ws = ws;
+			this.stopHid();
+		};
+		ws.onmessage = (ev): void => {
+			try {
+				const msg = JSON.parse(String(ev.data)) as ProxyStatus;
+				if (msg.type !== "status") return;
+				const connected = msg.connected && !msg.paused;
+				this.emit("status", {
+					connected,
+					percentage: connected ? (msg.battery ?? 0) : 0,
+					powerOn: msg.powerOn,
+					muted: msg.muted,
+				});
+			} catch {
+				// ignore malformed frames
+			}
+		};
+		ws.onerror = (): void => fail();
+		ws.onclose = (): void => fail();
+	}
+}
+
 /**
  * Parses the f1 21 status blob into a HeadsetStatus.
  * Byte layout (payload offsets, report ID stripped):
