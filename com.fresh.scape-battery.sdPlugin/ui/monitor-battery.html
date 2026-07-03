@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Monitor Scape Battery Settings</title>
+		<meta charset="utf-8" />
+		<script src="sdpi-components.js"></script>
+		<script>
+			const streamDeckClient = SDPIComponents.streamDeckClient;
+		</script>
+	</head>
+	<body>
+		<sdpi-item label="Device Name">
+			<sdpi-textfield setting="name" placeholder="Scape"> </sdpi-textfield>
+		</sdpi-item>
+		<sdpi-item label="Selected Device">
+			<sdpi-button onclick="javascript:streamDeckClient.send('sendToPlugin', {'event': 'refreshDevices'})"
+				>Refresh Devices</sdpi-button
+			>
+			<sdpi-select setting="device" datasource="getDevices" loading="Fetching devices..." hot-reload />
+		</sdpi-item>
+
+		<sdpi-item label="Background Color">
+			<sdpi-textfield setting="bg" placeholder="#12142D"> </sdpi-textfield>
+		</sdpi-item>
+		<sdpi-item label="Spacing">
+			<sdpi-range setting="spacing" min="1" max="4" step="1" default="2" showlabels />
+		</sdpi-item>
+	</body>
+</html>

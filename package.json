@@ -1,0 +1,39 @@
+{
+    "name": "streamdeck-scape-battery-plugin",
+    "version": "1.0.0",
+    "description": "Stream Deck plugin that monitors the Fractal Design Scape wireless headset's battery over USB HID.",
+    "author": "Niklas Lausch",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Niki2k1/streamdeck-scape-battery-plugin.git"
+    },
+    "scripts": {
+        "build": "rollup -c && npm run copy-deps",
+        "copy-deps": "rm -rf com.fresh.scape-battery.sdPlugin/node_modules && mkdir -p com.fresh.scape-battery.sdPlugin/node_modules && cp -R node_modules/node-hid node_modules/pkg-prebuilds com.fresh.scape-battery.sdPlugin/node_modules/",
+        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.fresh.scape-battery\"",
+        "lint": "eslint --max-warnings 0"
+    },
+    "prettier": "@elgato/prettier-config",
+    "type": "module",
+    "devDependencies": {
+        "@elgato/cli": "^1.4.0",
+        "@elgato/eslint-config": "^0.1.0",
+        "@elgato/prettier-config": "^0.2.6",
+        "@rollup/plugin-commonjs": "^28.0.0",
+        "@rollup/plugin-node-resolve": "^15.2.2",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-typescript": "^12.1.0",
+        "@tsconfig/node20": "^20.1.2",
+        "@types/node": "~20.15.0",
+        "rollup": "^4.0.2",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@elgato/streamdeck": "^1.0.0",
+        "@rollup/plugin-json": "^6.1.0",
+        "jimp": "^1.6.0",
+        "node-hid": "^3.3.0"
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "Name": "Scape Battery",
+    "Version": "1.0.0.0",
+    "Author": "Fresh",
+    "Actions": [
+        {
+            "Name": "Scape Headset",
+            "UserTitleEnabled": false,
+            "UUID": "com.fresh.scape-battery.monitor",
+            "Icon": "imgs/actions/monitor/icon",
+            "Tooltip": "Monitors the Fractal Scape headset's battery status.",
+            "PropertyInspectorPath": "ui/monitor-battery.html",
+            "Controllers": [
+                "Keypad"
+            ],
+            "States": [
+                {
+                    "Image": "imgs/actions/monitor/key-100",
+                    "TitleAlignment": "middle",
+                    "FontSize": 14,
+                    "FontFamily": "Verdana"
+                }
+            ]
+        }
+    ],
+    "Category": "Scape Battery",
+    "CategoryIcon": "imgs/plugin/category-icon",
+    "CodePath": "bin/plugin.js",
+    "Description": "A battery monitoring tool for the Fractal Design Scape wireless headset.",
+    "Icon": "imgs/plugin/marketplace-icon",
+    "SDKVersion": 2,
+    "Software": {
+        "MinimumVersion": "6.5"
+    },
+    "OS": [
+        {
+            "Platform": "mac",
+            "MinimumVersion": "12"
+        },
+        {
+            "Platform": "windows",
+            "MinimumVersion": "10"
+        }
+    ],
+    "Nodejs": {
+        "Version": "20",
+        "Debug": "enabled"
+    },
+    "UUID": "com.fresh.scape-battery"
+}
